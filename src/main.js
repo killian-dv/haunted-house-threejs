@@ -109,6 +109,38 @@ bushes4.scale.set(0.15, 0.15, 0.15);
 bushes4.position.set(-1, 0.05, 2.6);
 house.add(bushes1, bushes2, bushes3, bushes4);
 
+// graves
+const gravesSizes = {
+  width: 0.6,
+  height: 0.8,
+  depth: 0.2,
+};
+const gravesGeometry = new THREE.BoxGeometry(
+  gravesSizes.width,
+  gravesSizes.height,
+  gravesSizes.depth
+);
+const gravesMaterial = new THREE.MeshStandardMaterial();
+
+const graves = new THREE.Group();
+scene.add(graves);
+
+for (let i = 0; i < 30; i++) {
+  const angle = Math.random() * Math.PI * 2;
+  const radius = 3 + Math.random() * 4;
+  const x = Math.cos(angle) * radius;
+  const z = Math.sin(angle) * radius;
+  // mesh
+  const grave = new THREE.Mesh(gravesGeometry, gravesMaterial);
+  grave.position.set(x, 0, z);
+  grave.position.y = (Math.random() * gravesSizes.height) / 2;
+
+  const randomRotation = (Math.random() - 0.5) * 0.4;
+  grave.rotation.set(randomRotation, randomRotation, randomRotation);
+
+  graves.add(grave);
+}
+
 /**
  * Lights
  */
