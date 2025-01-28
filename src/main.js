@@ -37,26 +37,26 @@ const floorDisplacementTexture = textureLoader.load(
 
 floorColorTexture.colorSpace = THREE.SRGBColorSpace;
 
-const repeatTexture = {
+const floorRepeatTexture = {
   x: 8,
   y: 8,
   wrapS: THREE.RepeatWrapping,
   wrapT: THREE.RepeatWrapping,
 };
-floorColorTexture.repeat.set(repeatTexture.x, repeatTexture.y);
-floorARMTexture.repeat.set(repeatTexture.x, repeatTexture.y);
-floorNormalTexture.repeat.set(repeatTexture.x, repeatTexture.y);
-floorDisplacementTexture.repeat.set(repeatTexture.x, repeatTexture.y);
-floorColorTexture.wrapS = repeatTexture.wrapS;
-floorColorTexture.wrapT = repeatTexture.wrapT;
-floorARMTexture.wrapS = repeatTexture.wrapS;
-floorARMTexture.wrapT = repeatTexture.wrapT;
-floorNormalTexture.wrapS = repeatTexture.wrapS;
-floorNormalTexture.wrapT = repeatTexture.wrapT;
-floorDisplacementTexture.wrapS = repeatTexture.wrapS;
-floorDisplacementTexture.wrapT = repeatTexture.wrapT;
+floorColorTexture.repeat.set(floorRepeatTexture.x, floorRepeatTexture.y);
+floorARMTexture.repeat.set(floorRepeatTexture.x, floorRepeatTexture.y);
+floorNormalTexture.repeat.set(floorRepeatTexture.x, floorRepeatTexture.y);
+floorDisplacementTexture.repeat.set(floorRepeatTexture.x, floorRepeatTexture.y);
+floorColorTexture.wrapS = floorRepeatTexture.wrapS;
+floorColorTexture.wrapT = floorRepeatTexture.wrapT;
+floorARMTexture.wrapS = floorRepeatTexture.wrapS;
+floorARMTexture.wrapT = floorRepeatTexture.wrapT;
+floorNormalTexture.wrapS = floorRepeatTexture.wrapS;
+floorNormalTexture.wrapT = floorRepeatTexture.wrapT;
+floorDisplacementTexture.wrapS = floorRepeatTexture.wrapS;
+floorDisplacementTexture.wrapT = floorRepeatTexture.wrapT;
 
-// walls
+// wall
 const wallColorTexture = textureLoader.load(
   "./wall/castle_brick_broken_06_1k/castle_brick_broken_06_diff_1k.jpg"
 );
@@ -68,6 +68,35 @@ const wallARMTexture = textureLoader.load(
 );
 
 wallColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+// roof
+const roofColorTexture = textureLoader.load(
+  "./roof/clay_roof_tiles_1k/clay_roof_tiles_diff_1k.jpg"
+);
+const roofNormalTexture = textureLoader.load(
+  "./roof/clay_roof_tiles_1k/clay_roof_tiles_nor_gl_1k.jpg"
+);
+const roofARMTexture = textureLoader.load(
+  "./roof/clay_roof_tiles_1k/clay_roof_tiles_arm_1k.jpg"
+);
+
+roofColorTexture.colorSpace = THREE.SRGBColorSpace;
+
+const roofRepeatTexture = {
+  x: 5,
+  y: 1.2,
+  wrapS: THREE.RepeatWrapping,
+  wrapT: THREE.RepeatWrapping,
+};
+roofColorTexture.repeat.set(roofRepeatTexture.x, roofRepeatTexture.y);
+roofARMTexture.repeat.set(roofRepeatTexture.x, roofRepeatTexture.y);
+roofNormalTexture.repeat.set(roofRepeatTexture.x, roofRepeatTexture.y);
+roofColorTexture.wrapS = roofRepeatTexture.wrapS;
+roofARMTexture.wrapS = roofRepeatTexture.wrapS;
+roofNormalTexture.wrapS = roofRepeatTexture.wrapS;
+roofColorTexture.wrapT = roofRepeatTexture.wrapT;
+roofARMTexture.wrapT = roofRepeatTexture.wrapT;
+roofNormalTexture.wrapT = roofRepeatTexture.wrapT;
 
 // floor
 const floor = new THREE.Mesh(
@@ -130,13 +159,37 @@ const roofSizes = {
   height: 1.5,
   radialSegments: 4,
 };
+const roofGeometry = new THREE.ConeGeometry(
+  roofSizes.radius,
+  roofSizes.height,
+  roofSizes.radialSegments
+);
+
+// Adjust UVs
+const uvs = roofGeometry.attributes.uv;
+const angle = (7 * Math.PI) / 180;
+for (let i = 0; i < uvs.count; i++) {
+  const u = uvs.getX(i);
+  const v = uvs.getY(i);
+
+  // Rotation UVs by 7 degrees
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  const newU = u * cos - v * sin;
+  const newV = u * sin + v * cos;
+
+  uvs.setXY(i, newU, newV);
+}
+
 const roof = new THREE.Mesh(
-  new THREE.ConeGeometry(
-    roofSizes.radius,
-    roofSizes.height,
-    roofSizes.radialSegments
-  ),
-  new THREE.MeshStandardMaterial()
+  roofGeometry,
+  new THREE.MeshStandardMaterial({
+    map: roofColorTexture,
+    normalMap: roofNormalTexture,
+    aoMap: roofARMTexture,
+    roughnessMap: roofARMTexture,
+    metalnessMap: roofARMTexture,
+  })
 );
 roof.position.y += houseSizes.height + roofSizes.height / 2;
 roof.rotation.y = Math.PI / 4;
