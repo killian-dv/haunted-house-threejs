@@ -476,6 +476,24 @@ graves.children.forEach((grave) => {
   grave.receiveShadow = true;
 });
 
+// mapping
+directionalLight.shadow.mapSize.set(256, 256);
+directionalLight.shadow.camera.far = 20;
+directionalLight.shadow.camera.near = 1;
+directionalLight.shadow.camera.top = 8;
+directionalLight.shadow.camera.bottom = -8;
+directionalLight.shadow.camera.left = -8;
+directionalLight.shadow.camera.right = 8;
+
+ghost1.shadow.mapSize.set(256, 256);
+ghost1.shadow.camera.far = 10;
+
+ghost2.shadow.mapSize.set(256, 256);
+ghost2.shadow.camera.far = 10;
+
+ghost3.shadow.mapSize.set(256, 256);
+ghost3.shadow.camera.far = 10;
+
 /**
  * Animate
  */
