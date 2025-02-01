@@ -448,6 +448,35 @@ renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 /**
+ * Shadows
+ */
+// renderer
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+// cast and receive shadows
+directionalLight.castShadow = true;
+ghost1.castShadow = true;
+ghost2.castShadow = true;
+ghost3.castShadow = true;
+
+walls.castShadow = true;
+walls.receiveShadow = true;
+
+roof.castShadow = true;
+roof.receiveShadow = true;
+
+door.castShadow = true;
+door.receiveShadow = true;
+
+floor.receiveShadow = true;
+
+graves.children.forEach((grave) => {
+  grave.castShadow = true;
+  grave.receiveShadow = true;
+});
+
+/**
  * Animate
  */
 const timer = new Timer();
