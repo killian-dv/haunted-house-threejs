@@ -550,6 +550,9 @@ const tick = () => {
   timer.update();
   const elapsedTime = timer.getElapsed();
 
+  // Flicker the doorLight
+  doorLight.intensity = 5 + Math.random() * 2;
+
   // ghost animation
   const ghost1Angle = elapsedTime * 0.5;
   ghost1.position.x = Math.cos(ghost1Angle) * 4;
