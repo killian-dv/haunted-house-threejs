@@ -1,6 +1,7 @@
 import GUI from "lil-gui";
 import * as THREE from "three";
 import { Timer } from "three/addons/misc/Timer.js";
+import { Sky } from "three/addons/objects/Sky.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 /**
@@ -493,6 +494,51 @@ ghost2.shadow.camera.far = 10;
 
 ghost3.shadow.mapSize.set(256, 256);
 ghost3.shadow.camera.far = 10;
+
+/**
+ * Sky
+ */
+const sky = new Sky();
+sky.scale.set(100, 100, 100);
+scene.add(sky);
+
+sky.material.uniforms.turbidity.value = 10;
+sky.material.uniforms.rayleigh.value = 3;
+sky.material.uniforms.mieCoefficient.value = 0.01;
+sky.material.uniforms.mieDirectionalG.value = 0.95;
+sky.material.uniforms.sunPosition.value.set(0.3, -0.038, -0.95);
+
+// add sky settings to gui
+gui
+  .add(sky.material.uniforms.turbidity, "value")
+  .min(0)
+  .max(20)
+  .step(0.001)
+  .name("turbidity");
+gui
+  .add(sky.material.uniforms.rayleigh, "value")
+  .min(0)
+  .max(10)
+  .step(0.001)
+  .name("rayleigh");
+gui
+  .add(sky.material.uniforms.mieCoefficient, "value")
+  .min(0)
+  .max(0.1)
+  .step(0.001)
+  .name("mie coefficient");
+gui
+  .add(sky.material.uniforms.mieDirectionalG, "value")
+  .min(0)
+  .max(1)
+  .step(0.001)
+  .name("mie directional g");
+
+/**
+ * Fog
+ */
+const fog = new THREE.FogExp2("#1d343f", 0.1); // same color as the sky
+scene.fog = fog;
 
 /**
  * Animate
